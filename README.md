@@ -1,76 +1,153 @@
-[![build](https://github.com/freekode/tp2intervals/actions/workflows/build.yml/badge.svg)](https://github.com/freekode/tp2intervals/actions/workflows/build.yml)
+[![Build branches](https://github.com/freekode/tp2intervals/actions/workflows/branch.yml/badge.svg)](https://github.com/freekode/tp2intervals/actions/workflows/branch.yml)
 [![release](https://img.shields.io/github/release/freekode/tp2intervals)](https://github.com/freekode/tp2intervals/releases/latest)
 
-# TrainingPeaks to Intervals.icu
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E6W6XZP)
 
-App to sync planned workouts from TrainingPeaks to Intervals.icu and vice versa.
+# Third Party to Intervals.icu
 
-It can capture planned workouts from TP, then creates training plan in Intervals.icu based on these workouts.
-And it can take today's or tomorrow planned workout and create it in TP, so you can sync it to your favourite
-device.
+App to sync workouts between TrainingPeaks, TrainerRoad and Intervals.icu.
+
+Runs on MacOS (DMG), Windows (EXE installer), Linux (AppImage). Alternatively there is Docker image and executable JAR.
+
+All files are available for download on [Release page](https://github.com/freekode/tp2intervals/releases/latest).
+
+### TrainerRoad Updates ⚠️
+
+I don't have access to TrainerRoad anymore. Account, which I used, cancelled subscription. I don't use the platform and it's too expensive to have it for occasional fixes.
+To fix issues I can only relay on logs and HAR files from you.
+
+### TrainingPeaks features
+
+#### For athlete account
+
+* Sync planned workouts from Intervals to TrainingPeaks for today and tomorrow (free TP account)
+* Copy whole training plan from TrainingPeaks
+* Copy planned workouts for date range from TrainingPeaks to Intervals.icu training plan or workout folder
+
+#### For coach account
+
+* Copy whole training plan and workout library from TrainingPeaks
+
+### TrainerRoad features
+
+* Copy workouts from TrainerRoad library to Intervals
+* Copy planned workouts for date range from TrainerRoad to Intervals.icu training plan or workout folder
+
+### Beta features
+
+Beta features can be enabled in Configuration
+
+* Step Modifier (TrainingPeaks). Based on selecton `power=1s`, `power=3s` will be added for each step on Intervals.
+* Remove HTML tags from description (TrainerRoad). Cleans up workouts descriptions from HTML tags.
+
+<img src="https://github.com/freekode/tp2intervals/blob/main/docs/tp.png?raw=true" width="30%"><img src="https://github.com/freekode/tp2intervals/blob/main/docs/tr.png?raw=true" width="30%">
 
 **Only for educational purposes**
 
-## How to start the app
+## Other ways to run the app
 
-### JAR
-Easiest way to run the app.
+### Executable JAR
 
-1. You need JDK 21. The project has executable jar.
-   To start it first of all you need to have Java 21. You can install any JDK, links to installation instructions 
-   [Amazon Corretto](https://docs.aws.amazon.com/corretto/latest/corretto-21-ug/downloads-list.html), 
-   [OpenJDK](https://jdk.java.net/21/),
-   [Oracle JDK](https://www.oracle.com/java/technologies/downloads/)
-2. Download `tp2intervals.jar` from the [latest release](https://github.com/freekode/tp2intervals/releases/latest)
-3. Run the command
-    ```shell
-    java -jar tp2intervals.jar
-    ```
-   
-   If you want to have UI on different port
-    ```shell
-    java -Dserver.port=9090 -jar tp2intervals.jar
-    ```
-
-4. UI will be available on `http://localhost:8080` or on another port which you choose
-
-### Docker
-If you already have a docker, that's suites you more.
-
-You need to have installed Docker engine, instruction how to install [you can find here.](https://docs.docker.com/engine/install/)
-
-Next run the project with docker command:
+The project has executable jar with web UI. It requires JDK 21. To run jar:
 ```shell
-docker run -rm --name tp2intervals -p 8080:80 ghcr.io/freekode/tp2intervals/tp2intervals:latest
+java -jar tp2intervals.jar
 ```
 
-Or with `docker-compose`
+By default, UI is available on `http://localhost:8080`. To change port start jar with parameter:
+```shell
+java -Dserver.port=9090 -jar tp2intervals.jar
+```
+
+### Docker
+
+Docker image also built for every release
+
+To run docker execute:
+
+```shell
+docker run --rm --name tp2intervals -p 8080:8080 ghcr.io/freekode/tp2intervals/tp2intervals:latest
+```
+
+Or with `docker compose`
+
 ```yaml
-version: '3.1'
 services:
   app:
     image: ghcr.io/freekode/tp2intervals/tp2intervals:latest
     container_name: tp2intervals
     ports:
-      - '8080:80'
+      - '8080:8080'
 ```
 
 ## How to configure
-After you successfully started the application and able UI web page.
-You need to configure it to gain access to TrainingPeaks and to Intervals.icu
 
-### TrainingPeaks Auth Cookie
-Copy cookie `Production_tpAuth` (key and value, smth like `Production_tpAuth=very_long_string`) from the browser on TrainingPeaks page.
+After you successfully started the application and were able to open the web UI page.
+You need to configure it to gain access to Intervals.icu and to your other platform.
+Nice post how to do it is written here https://forum.intervals.icu/t/implemented-push-workout-to-wahoo/783/87
 
 ### Intervals API Key and Athlete Id
+
 These values available on [Settings page](https://intervals.icu/settings) in Developer Settings section.
 
-After you gathered all required configuration you can click Submit button on Configuration page.
-If everything is fine you will be redirected to home page where you can plan your workouts on TrainingPeaks.
+### TrainingPeaks Auth Cookie
 
-If your configuration is wrong. You will see an error that there is no access to TrainingPeaks or to Intervals.icu.
+If you want ot use TrainingPeaks you need to configure it. Copy cookie `Production_tpAuth` (key and value, smth
+like `Production_tpAuth=very_long_string`) from the browser on TrainingPeaks page.
+
+### TrainerRoad Auth Cookie
+
+If you want to use TrainerRoad you need to configure it. Very similar to TrainingPeaks. Copy cookie `SharedTrainerRoadAuth` (key
+and value, smth like `SharedTrainerRoadAuth=very_long_string`) from the browser on TrainerRoad page.
+
+After you gathered all required configuration, you can click Confirm button.
+If everything is fine, you will be redirected to the home page.
+
+If your configuration is wrong. You will see an error that there is no access to particular platform.
 Check all your values and save configuration again.
 
-## Known Issues
 
-Only time duration based intervals in workouts are supported
+## FAQ
+
+* Only duration based steps in workouts are supported, the app can't work with distance based steps
+* Ramp steps in TrainerRoad are not supported
+* **MacOS** app is not signed. Usually you need to open it twice. After opening it, be patient, it takes some time to
+  start
+* **Windows** The app will ask to access local network and Internet, you need to allow it. After all it makes HTTP requests
+* In case of any problems. You can create an issue on [GitHub](https://github.com/freekode/tp2intervals/issues)
+  or write directly to me iam@freekode.org. Add logs from your app, it can help a lot to resolve the issue. Or in case of TrainerRoad create HAR file
+* More info you can find on the forum https://forum.intervals.icu/t/tp2intervals-copy-trainingpeaks-and-trainerroad-workouts-plans-to-intervals/63375
+
+### Scheduling for the next day with TrainingPeaks free account
+Officially you can't plan workouts for future dates, but practically you can plan workout for tomorrow with free TP account.
+You can plan workout for the next day relative to TP server local time. TP server local time is in UTC-6 time zone.
+
+E.g your TZ is UTC+2, current local datetime 20.05.2024 06:00. TP server local datetime is 19.05.2024 22:00. You can plan workouts for 20.05.2024, you can't plan workouts for 21.05.2024, you can do it in 2 hours.
+
+E.g your TZ is UTC+12, current local datetime 20.05.2024 18:00. TP server local datetime is 20.05.2024 00:00. You can plan workouts for 21.05.2024.
+
+Example with [worldtimebuddy](https://www.worldtimebuddy.com/?pl=1&lid=206,100,756135,2193733&h=206&hf=0)
+
+### How to export HAR file
+
+1. Open new tab in your browser 
+2. Open dev tools, check Preserve log (Firefox Cog -> Persist Logs)
+
+   <img src="https://github.com/freekode/tp2intervals/blob/main/docs/har-1.png?raw=true" width="70%">
+3. Next steps are very important, as they simulate what the app does.
+   Open TrainerRoad page, open workout library, find any workout, open workout page (the page where you have chart with workout steps, description, alternatives, etc.)
+4. In dev tools, click Export HAR (Firefox - Cog -> Save All as HAR), save the file and send it to me
+ 
+   <img src="https://github.com/freekode/tp2intervals/blob/main/docs/har-2.png?raw=true" width="70%">
+
+
+### How to get logs for your issue
+
+1. Go to Configuration, check Show advanced configuration
+2. Set Log Level to DEBUG, click Confirm
+3. Reproduce your issue
+4. Find log file according to your system
+
+* Linux: ~/.config/tp2intervals/logs/main.log
+* MacOS: ~/Library/Logs/tp2intervals/main.log
+* Windows: %USERPROFILE%\AppData\Roaming\tp2intervals\logs\main.log
+* JAR: ./tp2intervals.log

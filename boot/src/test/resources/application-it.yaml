@@ -1,0 +1,27 @@
+app:
+  default-config:
+    'intervals.api-key': my-api-key
+    'intervals.athlete-id': i112233
+    'training-peaks.auth-cookie': Production_tpAuth=tp-auth-cookie
+    'trainer-road.auth-cookie': SharedTrainerRoadAuth=my-fav-cookie
+    'trainer-road.remove-html-tags': true
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            loggerLevel: full
+  jpa:
+    show-sql: true
+  datasource:
+    url: 'jdbc:sqlite::memory:'
+
+logging:
+  level:
+    org.freekode.tp2intervals.infrastructure: debug
+  file:
+    name:

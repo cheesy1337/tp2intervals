@@ -1,18 +1,24 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterLink, RouterOutlet } from '@angular/router';
-import { MatCardModule } from "@angular/material/card";
-import { MatIconModule } from "@angular/material/icon";
-import { MatToolbarModule } from "@angular/material/toolbar";
-import { MatButtonModule } from "@angular/material/button";
+import { Component, OnInit } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { TopBarComponent } from "app/top-bar/top-bar.component";
+
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, MatCardModule, MatIconModule, MatToolbarModule, RouterLink, MatButtonModule],
+  imports: [
+    RouterOutlet,
+    TopBarComponent
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
-  title = 'ui';
+export class AppComponent implements OnInit {
+
+  constructor(
+  ) {
+  }
+
+  ngOnInit(): void {
+  }
 }

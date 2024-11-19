@@ -1,31 +1,33 @@
-import { Injectable } from '@angular/core';
-import { MatSnackBar } from "@angular/material/snack-bar";
+import {Injectable} from '@angular/core';
+import {MatSnackBar} from "@angular/material/snack-bar";
+import { ToastrService } from 'ngx-toastr';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
+  private static readonly duration = 20 * 1000
+
   constructor(
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private toastr: ToastrService
   ) {
   }
 
-  error(message) {
-    this.snackBar.open(message, '', {
-      duration: 4000,
-      horizontalPosition: 'end',
-      verticalPosition: 'top',
-      panelClass: 'app-notification-error'
+  success(data) {
+    this.toastr.success(data, undefined, {
+      enableHtml: true,
+      closeButton: true,
+      timeOut: NotificationService.duration
     });
   }
 
-  success(message) {
-    this.snackBar.open(message, '', {
-      duration: 4000,
-      horizontalPosition: 'end',
-      verticalPosition: 'top',
-      panelClass: 'app-notification-success'
+  error(data) {
+    this.toastr.error(data, undefined, {
+      enableHtml: true,
+      closeButton: true,
+      timeOut: NotificationService.duration
     });
   }
 }
